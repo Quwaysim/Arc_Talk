@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "406717865645",
+    "project_id": "arc-talk",
+    "storage_bucket": "arc-talk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:406717865645:android:fac8c06890b91708377024",
+        "android_client_info": {
+          "package_name": "com.arctalk"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "406717865645-onsstq28e5lko5ibasrbeu69cfc9mjan.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.arctalk",
+            "certificate_hash": "1f37ec3d34c72d6a5cee32b1982b83a8fd101985"
+          }
+        },
+        {
+          "client_id": "406717865645-abfhvn8oahenr4mpaq206spdl496ic6g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCpnW4NWt3WhEvfxqBirJvKDbBjc04ckXQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "406717865645-abfhvn8oahenr4mpaq206spdl496ic6g.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
