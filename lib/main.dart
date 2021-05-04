@@ -6,7 +6,11 @@ import 'screens/chat_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/registration_screen.dart';
 
-void main() => runApp(ArcTalk());
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(ArcTalk());
+}
 
 class ArcTalk extends StatefulWidget {
   @override
@@ -17,11 +21,15 @@ class _ArcTalkState extends State<ArcTalk> {
   @override
   void initState() {
     super.initState();
-    Firebase.initializeApp();
+    // initializeFirebase();
   }
+
+  // Future initializeFirebase() async => await Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
+    // initializeFirebase();
+    // Firebase.initializeApp();
     return MaterialApp(
       theme: ThemeData.light().copyWith(
         primaryColor: kPrimary,
