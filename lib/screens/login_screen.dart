@@ -26,7 +26,6 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
-    // Firebase.initializeApp();
     controller =
         AnimationController(duration: Duration(seconds: 1), vsync: this);
     animation =

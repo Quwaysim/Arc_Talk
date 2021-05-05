@@ -21,15 +21,10 @@ class _ArcTalkState extends State<ArcTalk> {
   @override
   void initState() {
     super.initState();
-    // initializeFirebase();
   }
-
-  // Future initializeFirebase() async => await Firebase.initializeApp();
 
   @override
   Widget build(BuildContext context) {
-    // initializeFirebase();
-    // Firebase.initializeApp();
     return MaterialApp(
       theme: ThemeData.light().copyWith(
         primaryColor: kPrimary,

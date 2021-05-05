@@ -72,10 +72,14 @@ class _ChatScreenState extends State<ChatScreen> {
                       decoration: kMessageTextFieldDecoration,
                     ),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       messageTextController.clear();
-                      _firestore.collection('messages').add({
+                      _firestore
+                          .collection('messages')
+                          .doc((Timestamp.now()).toString())
+                          .set({
+                        'sort': Timestamp.now().toDate(),
                         'text': messageText,
                         'sender': loggedInUser.email,
                       });
@@ -108,6 +112,7 @@ class MessagesStream extends StatelessWidget {
             ),
           );
         }
+        //TODO - check reversal
         final messages = snapshot.data.docs.reversed;
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
