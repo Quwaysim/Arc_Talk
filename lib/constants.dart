@@ -19,6 +19,10 @@ const kMessageContainerDecoration = BoxDecoration(
 );
 
 const kTextFieldDecoration = InputDecoration(
+  prefixIcon: Icon(
+    Icons.email_rounded,
+    color: kPrimaryLight,
+  ),
   hintText: 'Enter a value',
   contentPadding: EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
   border: OutlineInputBorder(

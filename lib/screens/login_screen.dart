@@ -15,10 +15,13 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen>
     with SingleTickerProviderStateMixin {
-  bool showSpinner = false;
   final _auth = FirebaseAuth.instance;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   String email;
   String password;
+  bool showSpinner = false;
 
   AnimationController controller;
   Animation animation;
@@ -39,6 +42,8 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void dispose() {
     controller.dispose();
+    emailController.dispose();
+    passwordController.dispose();
     super.dispose();
   }
 
@@ -82,6 +87,7 @@ class _LoginScreenState extends State<LoginScreen>
                 height: 48.0,
               ),
               TextField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
@@ -89,20 +95,41 @@ class _LoginScreenState extends State<LoginScreen>
                 },
                 decoration: kTextFieldDecoration.copyWith(
                   hintText: 'Enter your email',
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryLight, width: 1.0),
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: BorderSide(color: kPrimaryLight, width: 2.0),
+                    borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                  ),
                 ),
               ),
               SizedBox(
                 height: 8.0,
               ),
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 textAlign: TextAlign.center,
+                obscuringCharacter: '-',
                 onChanged: (value) {
                   password = value;
                 },
                 decoration: kTextFieldDecoration.copyWith(
-                  hintText: 'Enter your password',
-                ),
+                    hintText: 'Enter your password',
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kPrimaryLight, width: 1.0),
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: kPrimaryLight, width: 2.0),
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                    ),
+                    prefixIcon: Icon(
+                      Icons.lock_rounded,
+                      color: kPrimaryLight,
+                    )),
               ),
               SizedBox(
                 height: 24.0,
@@ -120,11 +147,24 @@ class _LoginScreenState extends State<LoginScreen>
                     if (user != null) {
                       Navigator.pushNamed(context, ChatScreen.id);
                     }
+
+                    emailController.clear();
+                    passwordController.clear();
                     setState(() {
                       showSpinner = false;
                     });
                   } catch (e) {
-                    print(e);
+                    final snackBar = SnackBar(
+                      //Don't ask how I wrote this please, I was desperate but it's working 😂
+                      content: Text(
+                          e.toString().replaceRange(0, 14, '').split(']')[1]),
+                      backgroundColor: kPrimaryLight,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    // print(e.toString().replaceRange(0, 14, '').split(']')[1]);
+                    setState(() {
+                      showSpinner = false;
+                    });
                   }
                 },
               ),

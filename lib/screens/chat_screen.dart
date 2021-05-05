@@ -15,13 +15,11 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   final messageTextController = TextEditingController();
   final _auth = FirebaseAuth.instance;
-
   String messageText;
 
   @override
   void initState() {
     super.initState();
-
     getCurrentUser();
   }
 
@@ -66,6 +64,9 @@ class _ChatScreenState extends State<ChatScreen> {
                   Expanded(
                     child: TextField(
                       controller: messageTextController,
+                      autofocus: true,
+                      autocorrect: true,
+                      textCapitalization: TextCapitalization.sentences,
                       onChanged: (value) {
                         messageText = value;
                       },
@@ -75,11 +76,12 @@ class _ChatScreenState extends State<ChatScreen> {
                   TextButton(
                     onPressed: () {
                       messageTextController.clear();
+                      var timestamp = Timestamp.now().toDate();
                       _firestore
                           .collection('messages')
                           .doc((Timestamp.now()).toString())
                           .set({
-                        'sort': Timestamp.now().toDate(),
+                        'time': '${timestamp.hour}:${timestamp.minute}',
                         'text': messageText,
                         'sender': loggedInUser.email,
                       });
@@ -108,16 +110,16 @@ class MessagesStream extends StatelessWidget {
         if (!snapshot.hasData) {
           return Center(
             child: CircularProgressIndicator(
-              backgroundColor: kPrimaryLight,
+              backgroundColor: kPrimary,
             ),
           );
         }
-        //TODO - check reversal
         final messages = snapshot.data.docs.reversed;
         List<MessageBubble> messageBubbles = [];
         for (var message in messages) {
           final messageText = message['text'];
           final messageSender = message['sender'];
+          final time = message['time'];
 
           final currentUser = loggedInUser.email;
 
@@ -125,6 +127,7 @@ class MessagesStream extends StatelessWidget {
             sender: messageSender,
             text: messageText,
             isMe: currentUser == messageSender,
+            time: time,
           );
 
           messageBubbles.add(messageBubble);
@@ -142,10 +145,11 @@ class MessagesStream extends StatelessWidget {
 }
 
 class MessageBubble extends StatelessWidget {
-  MessageBubble({this.sender, this.text, this.isMe});
+  MessageBubble({this.sender, this.text, this.isMe, this.time});
 
   final String sender;
   final String text;
+  final String time;
   final bool isMe;
 
   @override
@@ -168,7 +172,7 @@ class MessageBubble extends StatelessWidget {
                 ? BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     bottomLeft: Radius.circular(30.0),
-                    bottomRight: Radius.circular(30.0))
+                    topRight: Radius.circular(30.0))
                 : BorderRadius.only(
                     bottomLeft: Radius.circular(30.0),
                     bottomRight: Radius.circular(30.0),
@@ -187,6 +191,16 @@ class MessageBubble extends StatelessWidget {
               ),
             ),
           ),
+          SizedBox(
+            height: 2.0,
+          ),
+          Text(
+            time,
+            style: TextStyle(
+              fontSize: 12.0,
+              color: Colors.black54,
+            ),
+          )
         ],
       ),
     );

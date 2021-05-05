@@ -13,9 +13,19 @@ class RegistrationScreen extends StatefulWidget {
 
 class _RegistrationScreenState extends State<RegistrationScreen> {
   final _auth = FirebaseAuth.instance;
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
   bool showSpinner = false;
   String email;
   String password;
+
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,25 +52,37 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 height: 48.0,
               ),
               TextField(
+                controller: emailController,
                 keyboardType: TextInputType.emailAddress,
                 textAlign: TextAlign.center,
                 onChanged: (value) {
                   email = value;
                 },
-                decoration:
-                    kTextFieldDecoration.copyWith(hintText: 'Enter your email'),
+                decoration: kTextFieldDecoration.copyWith(
+                    hintText: 'Enter your email',
+                    prefixIcon: Icon(
+                      Icons.email_rounded,
+                      color: kPrimary,
+                    )),
               ),
               SizedBox(
                 height: 8.0,
               ),
               TextField(
+                controller: passwordController,
                 obscureText: true,
                 textAlign: TextAlign.center,
+                obscuringCharacter: '-',
                 onChanged: (value) {
                   password = value;
                 },
                 decoration: kTextFieldDecoration.copyWith(
-                    hintText: 'Enter your password'),
+                  hintText: 'Enter your password',
+                  prefixIcon: Icon(
+                    Icons.lock_rounded,
+                    color: kPrimary,
+                  ),
+                ),
               ),
               SizedBox(
                 height: 24.0,
@@ -78,12 +100,23 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     if (newUser != null) {
                       Navigator.pushNamed(context, ChatScreen.id);
                     }
-
+                    emailController.clear();
+                    passwordController.clear();
                     setState(() {
                       showSpinner = false;
                     });
                   } catch (e) {
+                    final snackBar = SnackBar(
+                      //Don't ask how I wrote this please, I was desperate but it's working 😂
+                      content: Text(
+                          e.toString().replaceRange(0, 14, '').split(']')[1]),
+                      backgroundColor: kPrimary,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
                     print(e);
+                    setState(() {
+                      showSpinner = false;
+                    });
                   }
                 },
               ),
